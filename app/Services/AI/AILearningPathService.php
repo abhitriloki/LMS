@@ -176,6 +176,7 @@ class AILearningPathService
     protected function buildPathGenerationPrompt(User $user, string $targetRole, array $userAnalysis, Collection $courses): string
     {
         $coursesJson = json_encode($courses->toArray(), JSON_PRETTY_PRINT);
+        $departmentName = $user->department ? $user->department->name : 'N/A';
         
         return <<<PROMPT
 You are an expert learning path optimizer for corporate training. Generate a personalized learning path for an employee.
@@ -184,7 +185,7 @@ You are an expert learning path optimizer for corporate training. Generate a per
 - Name: {$user->name}
 - Current Role: {$user->position}
 - Target Role: {$targetRole}
-- Department: {$user->department->name ?? 'N/A'}
+- Department: {$departmentName}
 
 **Current Skills:**
 {$this->formatSkillsList($userAnalysis['current_skills'])}

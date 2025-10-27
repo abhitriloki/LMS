@@ -99,14 +99,26 @@ class CertificateService
     public function generateQRCode(Certificate $certificate): string
     {
         $verificationUrl = route('certificates.verify', $certificate->certificate_number);
-        
-        $qrCode = QrCode::format('png')
-            ->size(300)
-            ->margin(1)
-            ->generate($verificationUrl);
 
-        $filename = 'qr-codes/' . $certificate->certificate_number . '.png';
-        Storage::disk('public')->put($filename, $qrCode);
+        $filename = 'qr-codes/' . $certificate->certificate_number . '.svg';
+        try {
+            // Generate SVG to avoid Imagick dependency
+            $svg = QrCode::format('svg')
+                ->size(300)
+                ->margin(1)
+                ->generate($verificationUrl);
+        } catch (\Throwable $e) {
+            // Fallback: simple placeholder SVG if QR generation fails
+            $escapedUrl = htmlspecialchars($verificationUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">'
+                .'<rect width="100%" height="100%" fill="#f3f4f6"/>'
+                .'<text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="#111827">QR unavailable</text>'
+                .'<text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" font-size="10" fill="#111827">Verify:</text>'
+                .'<text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" font-size="9" fill="#2563eb">'.$escapedUrl.'</text>'
+                .'</svg>';
+        }
+
+        Storage::disk('public')->put($filename, $svg);
 
         return $filename;
     }
@@ -150,13 +162,38 @@ class CertificateService
             'course_title' => $course->title,
             'course_description' => $course->short_description ?? $course->description,
             'issued_date' => $certificate->issued_at->format('F d, Y'),
-            'completion_date' => $enrollment->completion_date?->format('F d, Y'),
+            'completion_date' => $enrollment->completion_date?->format('F d, Y') ?? $certificate->issued_at->format('F d, Y'),
             'final_score' => $enrollment->final_score ? number_format($enrollment->final_score, 2) . '%' : 'N/A',
             'duration' => $course->estimated_duration . ' hours',
-            'qr_code_url' => Storage::url($certificate->qr_code_path),
+            // Embed QR as data URL (works without Imagick and without storage symlink)
+            'qr_code_url' => $this->getQrCodeDataUrl($certificate),
             'verification_url' => route('certificates.verify', $certificate->certificate_number),
             'expires_at' => $certificate->expires_at?->format('F d, Y') ?? 'Never',
         ];
+    }
+
+    /**
+     * Get QR code as data URL for embedding in HTML/PDF
+     */
+    protected function getQrCodeDataUrl(Certificate $certificate): string
+    {
+        // If file exists, read and base64 encode
+        if ($certificate->qr_code_path && Storage::disk('public')->exists($certificate->qr_code_path)) {
+            $contents = Storage::disk('public')->get($certificate->qr_code_path);
+            $mime = str_ends_with($certificate->qr_code_path, '.svg') ? 'image/svg+xml' : 'image/png';
+            return 'data:' . $mime . ';base64,' . base64_encode($contents);
+        }
+
+        // Fallback: simple placeholder inline SVG without using QrCode
+        $verificationUrl = route('certificates.verify', $certificate->certificate_number);
+        $escapedUrl = htmlspecialchars($verificationUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">'
+            .'<rect width="100%" height="100%" fill="#f3f4f6"/>'
+            .'<text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="#111827">QR unavailable</text>'
+            .'<text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" font-size="10" fill="#111827">Verify:</text>'
+            .'<text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" font-size="9" fill="#2563eb">'.$escapedUrl.'</text>'
+            .'</svg>';
+        return 'data:image/svg+xml;base64,' . base64_encode($svg);
     }
 
     /**
@@ -166,9 +203,35 @@ class CertificateService
     {
         $html = $template->html_template;
 
-        // Replace variables in template
-        foreach ($data as $key => $value) {
-            $html = str_replace('{{' . $key . '}}', $value, $html);
+        // Add common aliases expected by templates
+        $aliases = [
+            'student_name' => $data['user_name'] ?? '',
+            'name' => $data['user_name'] ?? '',
+            'course_name' => $data['course_title'] ?? '',
+            'course' => $data['course_title'] ?? '',
+            'certificate_number' => $data['certificate_number'] ?? '',
+            'issue_date' => $data['issued_date'] ?? '',
+            'issued_date' => $data['issued_date'] ?? '',
+            'completion_date' => $data['completion_date'] ?? '',
+            'final_score' => $data['final_score'] ?? '',
+            'duration' => $data['duration'] ?? '',
+            'qr_code_url' => $data['qr_code_url'] ?? '',
+            'verification_url' => $data['verification_url'] ?? '',
+        ];
+
+        // Merge data and aliases
+        $vars = array_merge($data, $aliases);
+
+        // Replace variables using multiple syntax styles: {{key}}, {{ key }}, {key}, [[key]]
+        foreach ($vars as $key => $value) {
+            $replacements = [
+                '{{' . $key . '}}',
+                '{{ ' . $key . ' }}',
+                '{' . $key . '}',
+                '[[' . $key . ']]',
+                '[[ ' . $key . ' ]]',
+            ];
+            $html = str_replace($replacements, (string) ($value ?? ''), $html);
         }
 
         return $html;

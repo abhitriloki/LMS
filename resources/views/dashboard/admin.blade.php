@@ -70,7 +70,9 @@
     <!-- Enrollment Trends Chart -->
     <div class="card">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Enrollment Trends (Last 30 Days)</h3>
-        <canvas id="enrollmentTrendsChart" height="200"></canvas>
+        <div class="relative h-64">
+            <canvas id="enrollmentTrendsChart" class="w-full h-full"></canvas>
+        </div>
     </div>
 
     <!-- Top Courses -->

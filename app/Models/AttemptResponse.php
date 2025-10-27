@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class AttemptResponse extends Model
 {
@@ -17,7 +18,6 @@ class AttemptResponse extends Model
         'is_correct',
         'points_earned',
         'feedback',
-        'ai_grading_result_id',
     ];
 
     protected $casts = [
@@ -45,15 +45,16 @@ class AttemptResponse extends Model
     /**
      * Get the AI grading result for this response
      */
-    public function aiGradingResult(): BelongsTo
+    public function aiGradingResult()
     {
-        return $this->belongsTo(AIGradingResult::class);
+        // Relation stored in ai_grading_results.attempt_response_id
+        return $this->hasOne(AIGradingResult::class, 'attempt_response_id');
     }
 
     /**
      * Get the AI grading result (alias for convenience)
      */
-    public function aiGrading(): BelongsTo
+    public function aiGrading(): HasOne
     {
         return $this->aiGradingResult();
     }
@@ -71,7 +72,7 @@ class AttemptResponse extends Model
      */
     public function wasGradedByAI(): bool
     {
-        return !is_null($this->ai_grading_result_id);
+        return $this->aiGradingResult()->exists();
     }
 
     /**

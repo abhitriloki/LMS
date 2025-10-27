@@ -1,31 +1,31 @@
 import './bootstrap';
 import Alpine from 'alpinejs';
 
-// Initialize Alpine.js
+// Make Alpine available globally BEFORE Livewire loads
 window.Alpine = Alpine;
-Alpine.start();
 
-// Dark mode toggle
-document.addEventListener('alpine:init', () => {
-    Alpine.data('darkMode', () => ({
-        dark: localStorage.getItem('darkMode') === 'true',
-        
-        init() {
-            this.updateTheme();
-        },
-        
-        toggle() {
-            this.dark = !this.dark;
-            localStorage.setItem('darkMode', this.dark);
-            this.updateTheme();
-        },
-        
-        updateTheme() {
-            if (this.dark) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
+// Dark mode component - MUST be defined before Alpine.start()
+Alpine.data('darkMode', () => ({
+    dark: localStorage.getItem('darkMode') === 'true',
+    
+    init() {
+        this.updateTheme();
+    },
+    
+    toggle() {
+        this.dark = !this.dark;
+        localStorage.setItem('darkMode', this.dark);
+        this.updateTheme();
+    },
+    
+    updateTheme() {
+        if (this.dark) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
         }
-    }));
-});
+    }
+}));
+
+// Start Alpine - Livewire will use this instance
+Alpine.start();

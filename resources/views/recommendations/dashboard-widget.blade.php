@@ -51,7 +51,7 @@
                                     {{ $recommendation->course->title }}
                                 </h4>
                                 <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 flex-shrink-0">
-                                    {{ number_format($recommendation->score * 100, 0) }}%
+                                    {{ number_format($recommendation->relevance_score * 100, 0) }}%
                                 </span>
                             </div>
 

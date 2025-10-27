@@ -77,8 +77,8 @@
                 </a>
                 @endif
 
-                @if(Auth::user()->role === 'super_admin' || Auth::user()->role === 'hr_admin' || Auth::user()->role === 'instructor')
-                <!-- Admin Section -->
+                @if(Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin' || Auth::user()->role === 'instructor')
+                <!-- Management Section -->
                 <div x-show="sidebarOpen" x-transition class="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
                     <p class="px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         Management
@@ -130,7 +130,7 @@
                     <span x-show="sidebarOpen" x-transition class="ml-3 whitespace-nowrap">Grading Review</span>
                 </a>
 
-                @if(Auth::user()->role === 'super_admin' || Auth::user()->role === 'hr_admin')
+                @if(Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin')
                 <!-- Users -->
                 <a href="{{ route('admin.users.index') }}" 
                    class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' }}">

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alpine.js Test</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .box { padding: 20px; margin: 10px 0; border: 2px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Alpine.js Test Page</h1>
+    
+    <div class="box" x-data="{ message: 'Alpine.js is working!' }">
+        <h2>Test 1: Basic Alpine</h2>
+        <p x-text="message"></p>
+    </div>
+    
+    <div class="box" x-data="{ show: true }">
+        <h2>Test 2: Toggle</h2>
+        <button @click="show = !show">Toggle</button>
+        <p x-show="show">This text should toggle!</p>
+    </div>
+    
+    <div class="box" x-data="darkMode()">
+        <h2>Test 3: Dark Mode Component</h2>
+        <p>Dark mode: <span x-text="dark"></span></p>
+        <button @click="toggle()">Toggle Dark Mode</button>
+    </div>
+    
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('darkMode', () => ({
+                dark: false,
+                toggle() {
+                    this.dark = !this.dark;
+                    console.log('Dark mode:', this.dark);
+                }
+            }));
+        });
+    </script>
+</body>
+</html>

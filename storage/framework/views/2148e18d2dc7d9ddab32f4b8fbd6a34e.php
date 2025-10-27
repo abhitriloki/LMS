@@ -1,0 +1,1 @@
+<?php /**PATH C:\wamp64\www\corporate-lms\resources\views/admin/courses/builder.blade.php ENDPATH**/ ?>

@@ -18,7 +18,6 @@ class GradingReviewController extends Controller
         protected AttemptService $attemptService,
         protected AIGradingService $aiGradingService
     ) {
-        $this->middleware(['auth', 'can:grade,assessment'])->except(['index']);
     }
 
     /**

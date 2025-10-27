@@ -97,7 +97,7 @@
                 <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ $recommendation->course->title }}</h4>
                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">{{ Str::limit($recommendation->reasoning, 100) }}</p>
                 <div class="flex items-center justify-between">
-                    <span class="text-xs text-primary-600 dark:text-primary-400 font-medium">{{ number_format($recommendation->score * 100) }}% match</span>
+                    <span class="text-xs text-primary-600 dark:text-primary-400 font-medium">{{ number_format($recommendation->relevance_score * 100) }}% match</span>
                     <a href="{{ route('catalog.show', $recommendation->course) }}" class="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400">View Course</a>
                 </div>
             </div>

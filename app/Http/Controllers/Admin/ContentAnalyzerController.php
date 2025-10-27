@@ -17,7 +17,6 @@ class ContentAnalyzerController extends Controller
     public function __construct(AIContentAnalyzerService $analyzerService)
     {
         $this->analyzerService = $analyzerService;
-        $this->middleware(['auth', 'role:instructor,admin']);
     }
 
     /**

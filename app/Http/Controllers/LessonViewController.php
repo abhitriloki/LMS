@@ -15,7 +15,6 @@ class LessonViewController extends Controller
     public function __construct(ContentService $contentService)
     {
         $this->contentService = $contentService;
-        $this->middleware('auth');
     }
 
     /**

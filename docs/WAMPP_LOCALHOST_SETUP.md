@@ -42,21 +42,12 @@ This guide will help you set up and test the Corporate LMS project on your local
 
 ### Step 2: Install Composer
 
-**If you get "composer is not recognized" error, follow this guide first:**
-👉 **[Composer Installation Guide for Windows](COMPOSER_INSTALLATION_WINDOWS.md)**
-
-Quick steps:
-1. Download Composer from: https://getcomposer.org/Composer-Setup.exe
+1. Download Composer from: https://getcomposer.org/download/
 2. Run the installer
-3. Point it to your WAMPP PHP folder: `C:\wamp64\bin\php\php8.2.x\php.exe`
-4. Complete installation
-5. **Close and reopen Command Prompt**
-6. Verify installation:
+3. Verify installation:
    ```cmd
    composer --version
    ```
-
-**Important**: You MUST open a NEW Command Prompt after installing Composer!
 
 ### Step 3: Install Node.js
 

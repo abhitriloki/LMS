@@ -5,7 +5,7 @@
 @section('page-title', 'Dashboard')
 
 @section('content')
-@if(Auth::user()->role === 'super_admin' || Auth::user()->role === 'hr_admin')
+@if(Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin')
     @include('dashboard.admin')
 @elseif(Auth::user()->role === 'instructor')
     @include('dashboard.instructor')

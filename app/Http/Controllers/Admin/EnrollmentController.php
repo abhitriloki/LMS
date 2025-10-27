@@ -19,7 +19,6 @@ class EnrollmentController extends Controller
         protected EnrollmentService $enrollmentService,
         protected EnrollmentRepositoryInterface $enrollmentRepository
     ) {
-        $this->middleware(['auth', 'role:super_admin,hr_admin,instructor']);
     }
 
     /**

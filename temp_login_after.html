@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" x-data="darkMode" :class="{ 'dark': dark }">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="UShmZ3GA4vm3y7U9bxSWkmh0ZtCuBIz6oJXnTTyz">
+
+    <title>Corporate LMS - Login</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
+
+    <!-- Scripts -->
+    <link rel="preload" as="style" href="http://localhost:8000/build/assets/app-BarA9md2.css" /><link rel="modulepreload" href="http://localhost:8000/build/assets/app-DTiAi4FU.js" /><link rel="modulepreload" href="http://localhost:8000/build/assets/vendor-j6H1NlLE.js" /><link rel="stylesheet" href="http://localhost:8000/build/assets/app-BarA9md2.css" data-navigate-track="reload" /><script type="module" src="http://localhost:8000/build/assets/app-DTiAi4FU.js" data-navigate-track="reload"></script></head>
+<body class="font-sans antialiased">
+    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
+        <div class="mb-6">
+            <a href="/">
+                <h1 class="text-3xl font-bold text-primary-600 dark:text-primary-400">
+                    Corporate LMS
+                </h1>
+            </a>
+        </div>
+
+        <div class="w-full sm:max-w-md px-6 py-8 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+            
+            
+            <div>
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Sign in to your account</h2>
+
+    <form method="POST" action="http://localhost:8000/login" class="space-y-6">
+        <input type="hidden" name="_token" value="UShmZ3GA4vm3y7U9bxSWkmh0ZtCuBIz6oJXnTTyz" autocomplete="off">
+        <!-- Email Address -->
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Email address
+            </label>
+            <input id="email" type="email" name="email" value="" required autofocus
+                   class="input ">
+                    </div>
+
+        <!-- Password -->
+        <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Password
+            </label>
+            <input id="password" type="password" name="password" required
+                   class="input ">
+                    </div>
+
+        <!-- Remember Me -->
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <input id="remember" type="checkbox" name="remember"
+                       class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                <label for="remember" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                    Remember me
+                </label>
+            </div>
+
+            <div class="text-sm">
+                <a href="http://localhost:8000/forgot-password" class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400">
+                    Forgot password?
+                </a>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+            <button type="submit" class="w-full btn btn-primary">
+                Sign in
+            </button>
+        </div>
+
+        <!-- Register Link -->
+        <div class="text-center text-sm">
+            <span class="text-gray-600 dark:text-gray-400">Don't have an account?</span>
+            <a href="http://localhost:8000/register" class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400">
+                Register here
+            </a>
+        </div>
+    </form>
+</div>
+        </div>
+
+        <!-- Dark Mode Toggle -->
+        <div class="mt-6">
+            <button @click="toggle" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                <svg x-show="!dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+                <svg x-show="dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</body>
+</html>
+
+

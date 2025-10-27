@@ -15,7 +15,6 @@ class CertificateController extends Controller
 
     public function __construct(CertificateService $certificateService)
     {
-        $this->middleware(['auth', 'role:admin,hr_admin']);
         $this->certificateService = $certificateService;
     }
 

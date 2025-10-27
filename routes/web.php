@@ -121,8 +121,8 @@ Route::get('/verify-certificate', [CertificateController::class, 'verify'])->nam
 Route::post('/verify-certificate', [CertificateController::class, 'verifyPost'])->name('certificates.verify.post');
 Route::get('/verify-certificate/{certificateNumber}', [CertificateController::class, 'verify'])->name('certificates.verify.number');
 
-// Admin routes
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+// Admin routes (accessible by admin, super_admin, and instructor)
+Route::middleware(['auth', 'role:admin,super_admin,instructor'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('categories', CategoryController::class);
     Route::post('categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');

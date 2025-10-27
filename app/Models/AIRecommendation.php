@@ -16,17 +16,18 @@ class AIRecommendation extends Model
     protected $fillable = [
         'user_id',
         'course_id',
-        'recommendation_type',
-        'score',
+        'relevance_score',
         'reasoning',
         'status',
         'feedback',
         'expires_at',
+        'metadata',
     ];
 
     protected $casts = [
-        'score' => 'decimal:2',
+        'relevance_score' => 'decimal:2',
         'expires_at' => 'datetime',
+        'metadata' => 'array',
     ];
 
     /**

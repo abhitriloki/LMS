@@ -80,7 +80,16 @@ class CertificateController extends Controller
         }
 
         if (!$certificate->file_path || !Storage::disk('public')->exists($certificate->file_path)) {
-            return back()->with('error', 'Certificate file not found.');
+            // Attempt on-demand regeneration
+            try {
+                $certificate = $this->certificateService->regenerate($certificate);
+            } catch (\Throwable $e) {
+                return back()->with('error', 'Certificate file not found and could not be regenerated: ' . $e->getMessage());
+            }
+
+            if (!$certificate->file_path || !Storage::disk('public')->exists($certificate->file_path)) {
+                return back()->with('error', 'Certificate file not found.');
+            }
         }
 
         // Track download

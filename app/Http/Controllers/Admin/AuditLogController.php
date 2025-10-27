@@ -14,7 +14,6 @@ class AuditLogController extends Controller
     public function __construct(AuditLogService $auditLogService)
     {
         $this->auditLogService = $auditLogService;
-        $this->middleware(['auth', 'role:super_admin,hr_admin']);
     }
 
     /**

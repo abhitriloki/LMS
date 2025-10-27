@@ -25,7 +25,7 @@ class DashboardController extends Controller
         
         // Get role-specific dashboard data
         $data = match($user->role) {
-            'super_admin', 'hr_admin' => $this->getAdminDashboardData($user),
+            'super_admin', 'admin' => $this->getAdminDashboardData($user),
             'instructor' => $this->getInstructorDashboardData($user),
             default => $this->getEmployeeDashboardData($user),
         };
@@ -110,9 +110,9 @@ class DashboardController extends Controller
             })
             ->whereHas('attempts', function($query) {
                 $query->whereHas('responses', function($q) {
-                    $q->whereNull('score')
+                    $q->whereNull('points_earned')
                       ->whereHas('question', function($qq) {
-                          $qq->where('type', 'essay');
+                          $qq->where('question_type', 'essay');
                       });
                 });
             })
@@ -170,7 +170,7 @@ class DashboardController extends Controller
         $recommendations = AIRecommendation::where('user_id', $user->id)
             ->where('status', 'pending')
             ->with('course.category')
-            ->orderBy('score', 'desc')
+            ->orderBy('relevance_score', 'desc')
             ->limit(3)
             ->get();
         
@@ -194,7 +194,7 @@ class DashboardController extends Controller
      */
     protected function getRecentActivity($user)
     {
-        if (in_array($user->role, ['super_admin', 'hr_admin'])) {
+        if (in_array($user->role, ['super_admin', 'admin'])) {
             // System-wide activity for admins
             return AnalyticsEvent::with(['user', 'course'])
                 ->orderBy('created_at', 'desc')
